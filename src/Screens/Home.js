@@ -167,7 +167,7 @@ function Home() {
           <Field1>
             <EditContainer>
               <SelectBox1>
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <FormControl style={{ width: "100%" }}>
                   <Select
                     value={age}
                     onChange={handleChange}
@@ -201,7 +201,7 @@ function Home() {
           <Field1>
             <EditContainer>
               <SelectBox1>
-                <FormControl sx={{ minWidth: 120 }} style={{ width: "100%" }}>
+                <FormControl style={{ width: "100%" }}>
                   <Select
                     value={age}
                     onChange={handleChange}
@@ -335,7 +335,7 @@ const StyledButton = styled(Button)`
 
 const SelectBox1 = styled.div`
   width: 100%;
-  .MuiFormControl-root {
+  && {
     width: 100%;
     min-width: 156px !important;
     margin: unset !important;
