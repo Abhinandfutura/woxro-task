@@ -25,7 +25,6 @@ function CompanyDetails(props) {
         setLoading(false);
         setCmpData(completeData);
       }
-      console.log("pppp", CmpData);
     }
   };
 
@@ -33,7 +32,6 @@ function CompanyDetails(props) {
     mapping();
   }, [filteredDatas.length]);
 
-  console.log("---------------", completeData);
   const ref = useRef();
   const [fav, setFav] = useState(false);
   const scroll = (scrollOffset) => {
@@ -62,7 +60,7 @@ function CompanyDetails(props) {
                   {items.map((subItems, sIndex) => {
                     return (
                       <>
-                        <Card1 sx={{ maxWidth: 245 }}>
+                        <Card1 sx={{ maxWidth: 245 }} key={subItems.title}>
                           <CardMedia1
                             component="img"
                             alt="green iguana"
