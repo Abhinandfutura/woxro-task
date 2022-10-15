@@ -335,15 +335,13 @@ const StyledButton = styled(Button)`
 
 const SelectBox1 = styled.div`
   width: 100%;
-  .css-1869usk-MuiFormControl-root {
+  .MuiFormControl-root {
     width: 100%;
     min-width: 156px !important;
     margin: unset !important;
   }
 
-  .css-1auycx3-MuiAutocomplete-root
-    .MuiOutlinedInput-root
-    .MuiAutocomplete-endAdornment {
+  .MuiAutocomplete-root .MuiOutlinedInput-root .MuiAutocomplete-endAdornment {
     top: -1px !important;
   }
   .MuiOutlinedInput-notchedOutline {
@@ -353,9 +351,9 @@ const SelectBox1 = styled.div`
   }
 
   div div div {
-    padding: 3px;
+    padding: 9px;
   }
-  .css-1auycx3-MuiAutocomplete-root
+  .MuiAutocomplete-root
     .MuiOutlinedInput-root.MuiInputBase-sizeSmall
     .MuiAutocomplete-input {
     padding: 0px 4px 0px 6px;
@@ -364,9 +362,6 @@ const SelectBox1 = styled.div`
   em {
     font-style: normal !important;
     font-family: unset !important;
-  }
-  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
-    padding: 10px !important;
   }
 `;
 
