@@ -130,7 +130,6 @@ const Links = styled(Link)`
   text-decoration: none;
   color: black;
   font-size: 13px;
-  font-weight: 300;
 `;
 
 const Center = styled.div`

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -9,212 +9,142 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-function CompanyDetails() {
+import { CircularProgress } from "@mui/material";
+function CompanyDetails(props) {
+  const { names, filteredDatas, icon, isRemove, isHide } = props;
+  const [loading, setLoading] = useState(false);
+  let completeData = [];
+  const [CmpData, setCmpData] = useState([]);
+  const mapping = async () => {
+    if (names) {
+      setLoading(true);
+      completeData = await filteredDatas
+        .map((i) => i.map((i) => i).filter((i) => i.name === names))
+        .filter((k) => (k.length ? k : ""));
+      if (completeData.length) {
+        setLoading(false);
+        setCmpData(completeData);
+      }
+      console.log("pppp", CmpData);
+    }
+  };
+
+  useEffect(() => {
+    mapping();
+  }, [filteredDatas.length]);
+
+  console.log("---------------", completeData);
   const ref = useRef();
   const [fav, setFav] = useState(false);
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
   };
   return (
-    <Container>
-      <Header1>
-        <RightContainer>
-          <ImgContainer>
-            <Img src="https://www.xentice.com/static/media/commercial_space.cabcda3f.png" />
-          </ImgContainer>
-          <span>Commercial Shop </span>
-        </RightContainer>
-        <Links to="/ddd">Explore More</Links>
-      </Header1>
-      <CardComponent ref={ref}>
-        <Card1 sx={{ maxWidth: 245 }}>
-          <CardMedia1
-            component="img"
-            alt="green iguana"
-            height="140"
-            src="https://www.xentice.com/static/media/office.27bb9079.jpg"
-          />
-          <CardContainer>
-            <ShopTxtContainer>
-              <ShopTxt>Shop</ShopTxt>
+    <>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <Container>
+          <Header1>
+            <RightContainer>
+              <ImgContainer>
+                <Img src={icon} />
+              </ImgContainer>
+              <span>{names} </span>
+            </RightContainer>
+            <Links to="/ddd">Explore More</Links>
+          </Header1>
 
-              <IconButton>
-                {fav ? (
-                  <StyledFavIcon onClick={() => setFav(false)} />
-                ) : (
-                  <FavoriteBorderIcon onClick={() => setFav(true)} />
-                )}
-              </IconButton>
-            </ShopTxtContainer>
-            <LocationContainer>
-              <IconContainer>
-                <LocationOnIcon />
-                <span style={{ fontSize: "13px", fontWeight: "500   " }}>
-                  Cochin
-                </span>
-              </IconContainer>
+          <CardComponent ref={ref}>
+            {CmpData.map((items, index) => {
+              return (
+                <>
+                  {items.map((subItems, sIndex) => {
+                    return (
+                      <>
+                        <Card1 sx={{ maxWidth: 245 }}>
+                          <CardMedia1
+                            component="img"
+                            alt="green iguana"
+                            height="140"
+                            src={subItems[0]}
+                          />
 
-              <Rate>Rs 1150 /Month</Rate>
-            </LocationContainer>
-            <Explore>Explore Now</Explore>
-          </CardContainer>
-        </Card1>{" "}
-        <Card1 sx={{ maxWidth: 245 }}>
-          <CardMedia1
-            component="img"
-            alt="green iguana"
-            height="140"
-            src="https://www.xentice.com/static/media/office.27bb9079.jpg"
-          />
-          <CardContainer>
-            <ShopTxtContainer>
-              <ShopTxt>Shop</ShopTxt>
+                          <CardContainer>
+                            <ShopTxtContainer>
+                              <ShopTxt>{subItems.title}</ShopTxt>
 
-              <IconButton>
-                {fav ? (
-                  <StyledFavIcon onClick={() => setFav(false)} />
-                ) : (
-                  <FavoriteBorderIcon onClick={() => setFav(true)} />
-                )}
-              </IconButton>
-            </ShopTxtContainer>
-            <LocationContainer>
-              <IconContainer>
-                <LocationOnIcon />
-                <span style={{ fontSize: "13px", fontWeight: "500   " }}>
-                  Cochin
-                </span>
-              </IconContainer>
+                              <IconButton>
+                                {fav === subItems.title ? (
+                                  <StyledFavIcon />
+                                ) : (
+                                  <FavoriteBorderIcon
+                                    onClick={() => setFav(subItems.title)}
+                                  />
+                                )}
+                              </IconButton>
+                            </ShopTxtContainer>
+                            <LocationContainer>
+                              <IconContainer>
+                                <LocationOnIcon />
+                                <span
+                                  style={{
+                                    fontSize: "13px",
+                                    fontWeight: "500   ",
+                                  }}
+                                >
+                                  {subItems.city}
+                                </span>
+                              </IconContainer>
+                              {isRemove ? (
+                                ""
+                              ) : isHide ? (
+                                <Rate>
+                                  {subItems.mem_plan.length === 2
+                                    ? `  Rs${subItems.mem_plan[1].price}`
+                                    : ""}
+                                  {subItems.mem_plan.length === 2
+                                    ? `Rs ${subItems.mem_plan[1].type}`
+                                    : ""}
+                                </Rate>
+                              ) : (
+                                <Rate>
+                                  Rs
+                                  {subItems.price
+                                    ? subItems.price.rate
+                                    : subItems.mem_plan
+                                    ? subItems.mem_plan[0].price
+                                    : ""}
+                                  {subItems.price
+                                    ? subItems.price.type
+                                    : subItems.mem_plan
+                                    ? subItems.mem_plan[0].type
+                                    : ""}
+                                </Rate>
+                              )}
+                            </LocationContainer>
+                            <Explore>Explore Now</Explore>
+                          </CardContainer>
+                        </Card1>
+                      </>
+                    );
+                  })}
+                </>
+              );
+            })}
+          </CardComponent>
 
-              <Rate>Rs 1150 /Month</Rate>
-            </LocationContainer>
-            <Explore>Explore Now</Explore>
-          </CardContainer>
-        </Card1>{" "}
-        <Card1 sx={{ maxWidth: 245 }}>
-          <CardMedia1
-            component="img"
-            alt="green iguana"
-            height="140"
-            src="https://www.xentice.com/static/media/office.27bb9079.jpg"
-          />
-          <CardContainer>
-            <ShopTxtContainer>
-              <ShopTxt>Shop</ShopTxt>
-
-              <IconButton>
-                {fav ? (
-                  <StyledFavIcon onClick={() => setFav(false)} />
-                ) : (
-                  <FavoriteBorderIcon onClick={() => setFav(true)} />
-                )}
-              </IconButton>
-            </ShopTxtContainer>
-            <LocationContainer>
-              <IconContainer>
-                <LocationOnIcon />
-                <span style={{ fontSize: "13px", fontWeight: "500   " }}>
-                  Cochin
-                </span>
-              </IconContainer>
-
-              <Rate>Rs 1150 /Month</Rate>
-            </LocationContainer>
-            <Explore>Explore Now</Explore>
-          </CardContainer>
-        </Card1>
-        <Card1 sx={{ maxWidth: 245 }}>
-          <CardMedia1
-            component="img"
-            alt="green iguana"
-            height="140"
-            src="https://www.xentice.com/static/media/office.27bb9079.jpg"
-          />
-          <CardContainer>
-            <ShopTxtContainer>
-              <ShopTxt>Shop</ShopTxt>
-              <IconButton>
-                <FavoriteBorderIcon />
-              </IconButton>
-            </ShopTxtContainer>
-            <LocationContainer>
-              <IconContainer>
-                <LocationOnIcon />
-                <span style={{ fontSize: "13px", fontWeight: "500   " }}>
-                  Cochin
-                </span>
-              </IconContainer>
-
-              <Rate>Rs 1150 /Month</Rate>
-            </LocationContainer>
-            <Explore>Explore Now</Explore>
-          </CardContainer>
-        </Card1>{" "}
-        <Card1 sx={{ maxWidth: 245 }}>
-          <CardMedia1
-            component="img"
-            alt="green iguana"
-            height="140"
-            src="https://www.xentice.com/static/media/office.27bb9079.jpg"
-          />
-          <CardContainer>
-            <ShopTxtContainer>
-              <ShopTxt>Shop</ShopTxt>
-              <IconButton>
-                <FavoriteBorderIcon />
-              </IconButton>
-            </ShopTxtContainer>
-            <LocationContainer>
-              <IconContainer>
-                <LocationOnIcon />
-                <span style={{ fontSize: "13px", fontWeight: "500   " }}>
-                  Cochin
-                </span>
-              </IconContainer>
-
-              <Rate>Rs 1150 /Month</Rate>
-            </LocationContainer>
-            <Explore>Explore Now</Explore>
-          </CardContainer>
-        </Card1>{" "}
-        <Card1 sx={{ maxWidth: 245 }}>
-          <CardMedia1
-            component="img"
-            alt="green iguana"
-            height="140"
-            src="https://www.xentice.com/static/media/office.27bb9079.jpg"
-          />
-          <CardContainer>
-            <ShopTxtContainer>
-              <ShopTxt>Shop</ShopTxt>
-              <IconButton>
-                <FavoriteBorderIcon />
-              </IconButton>
-            </ShopTxtContainer>
-            <LocationContainer>
-              <IconContainer>
-                <LocationOnIcon />
-                <span style={{ fontSize: "13px", fontWeight: "500   " }}>
-                  Cochin
-                </span>
-              </IconContainer>
-
-              <Rate>Rs 1150 /Month</Rate>
-            </LocationContainer>
-            <Explore>Explore Now</Explore>
-          </CardContainer>
-        </Card1>
-      </CardComponent>
-      <IConButton onClick={() => scroll(-400)}>
-        <ArrowBackIosIcon />
-      </IConButton>
-      <IConButton2 onClick={() => scroll(400)}>
-        <ArrowForwardIosIcon />
-      </IConButton2>
-    </Container>
+          <IConButton>
+            <ArrowBackIosIcon onClick={() => scroll(-400)} />
+          </IConButton>
+          <IConButton2>
+            <ArrowForwardIosIcon onClick={() => scroll(400)} />
+          </IConButton2>
+        </Container>
+      )}
+    </>
   );
 }
-
 export default CompanyDetails;
 const CardMedia1 = styled(CardMedia)`
   && {
