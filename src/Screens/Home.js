@@ -201,7 +201,7 @@ function Home() {
           <Field1>
             <EditContainer>
               <SelectBox1>
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <FormControl sx={{ minWidth: 120 }} style={{ width: "100%" }}>
                   <Select
                     value={age}
                     onChange={handleChange}
@@ -351,7 +351,7 @@ const SelectBox1 = styled.div`
   }
 
   div div div {
-    padding: 9px;
+    padding: 9px !important;
   }
   .MuiAutocomplete-root
     .MuiOutlinedInput-root.MuiInputBase-sizeSmall
